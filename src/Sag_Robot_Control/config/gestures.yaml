@@ -1,0 +1,98 @@
+# SGR532 机械臂动作/姿态库
+# 
+# 使用方法:
+#   ros2 topic pub /robot_gesture/play std_msgs/msg/String "{data: 'shake_head'}"
+#
+# =======================
+# 基础姿态 (Single Poses)
+# =======================
+poses:
+  home:
+    description: "归位"
+    joints: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    duration: 2.0
+
+  sleep:
+    description: "休眠姿态"
+    joints: [0.0, 1.4, -1.47, 0.0, -0.4851, 0.0]
+    duration: 2.0
+
+  shake_head_left:
+    joints: [0.0, 0.0, 0.0, -0.5, 0.0, 0.0]
+    duration: 0.5
+
+  shake_head_right:
+    joints: [0.0, 0.0, 0.0, 0.5, 0.0, 0.0]
+    duration: 0.5
+
+  nod_down:
+    joints: [0.0, -0.3, 0.4, 0.0, 0.0, 0.0]
+    duration: 0.3
+
+  nod_up:
+    joints: [0.0, 0.1, -0.2, 0.0, 0.0, 0.0]
+    duration: 0.3
+
+  thinking_1:
+    joints: [0.0, 0.1, 0.1, 0.0, 0.1, 0.0]
+    duration: 0.5
+
+  thinking_2:
+    joints: [0.0, 0.15, 0.15, 0.0, 0.15, 0.0]
+    duration: 0.5
+
+# =======================
+# 复合动作 (Gestures)
+# =======================
+gestures:
+  shake_head:
+    description: "摇头"
+    loop: false
+    sequence:
+      - pose: home
+        duration: 1.0
+      - pose: shake_head_left
+        duration: 0.5
+      - pose: shake_head_right
+        duration: 0.5
+      - pose: shake_head_left
+        duration: 0.5
+      - pose: shake_head_right
+        duration: 0.5
+      - pose: home
+        duration: 1.0
+
+  nod:
+    description: "点头"
+    loop: false
+    sequence:
+      - pose: home
+        duration: 0.5
+      - pose: nod_down
+        duration: 0.3
+      - pose: nod_up
+        duration: 0.3
+      - pose: nod_down
+        duration: 0.3
+      - pose: nod_up
+        duration: 0.3
+      - pose: home
+        duration: 0.5
+
+  thinking:
+    description: "思考中"
+    loop: true
+    sequence:
+      - pose: thinking_1
+        duration: 0.5
+      - pose: thinking_2
+        duration: 0.5
+
+  breathing:
+    description: "呼吸感"
+    loop: true
+    sequence:
+      - joints: [0.0, 0.05, 0.0, 0.0, 0.0, 0.0]
+        duration: 1.0
+      - joints: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        duration: 1.0
