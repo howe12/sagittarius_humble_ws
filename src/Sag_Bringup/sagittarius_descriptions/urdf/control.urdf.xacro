@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <ros2_control name="SgrHardwareInterface" type="system">
+
+    <hardware>
+
+      <!-- If we are using the actual, physical robot -->
+      <xacro:if value="${device_type == 'actual'}">
+        <plugin>sgr_ros_control/SgrHardwareInterface</plugin>
+        <param name="loop_hz">10</param>
+        <param name="group_name">arm</param>
+        <param name="gripper_name">gripper</param>
+        <param name="joint_states_topic">joint_states</param>
+      </xacro:if>
+
+      <!-- If doing basic simulation of the robot -->
+      <xacro:if value="${device_type == 'simulation'}">
+        <plugin>fake_components/GenericSystem</plugin>
+      </xacro:if>
+
+      <!-- If simulating the robot in Gazebo Classic -->
+      <xacro:if value="${device_type == 'gazebo'}">
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </xacro:if>
+
+    </hardware>
+
+    <joint name="joint1">
+      <command_interface name="position">
+        <param name="min">"${joint1_limit_lower}"</param>
+        <param name="max">"${joint1_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint2">
+      <command_interface name="position">
+        <param name="min">"${joint2_limit_lower}"</param>
+        <param name="max">"${joint2_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint3">
+      <command_interface name="position">
+        <param name="min">"${joint3_limit_lower}"</param>
+        <param name="max">"${joint3_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint4">
+      <command_interface name="position">
+        <param name="min">"${joint4_limit_lower}"</param>
+        <param name="max">"${joint4_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint5">
+      <command_interface name="position">
+        <param name="min">"${joint5_limit_lower}"</param>
+        <param name="max">"${joint5_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint6">
+      <command_interface name="position">
+        <param name="min">"${joint6_limit_lower}"</param>
+        <param name="max">"${joint6_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint_gripper_left">
+      <command_interface name="position">
+        <param name="min">"${joint_gripper_left_limit_lower}"</param>
+        <param name="max">"${joint_gripper_left_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="joint_gripper_right">
+      <command_interface name="position">
+        <param name="min">"${joint_gripper_right_limit_lower}"</param>
+        <param name="max">"${joint_gripper_right_limit_upper}"</param>
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+  </ros2_control>
+
+
+</robot>

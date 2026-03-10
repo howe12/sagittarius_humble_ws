@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="sgr532" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <xacro:arg name="robot_name" default = "sgr532"/>
+    
+    <xacro:arg name="load_gazebo_configs" default="false"/>
+    <xacro:arg name="use_world_frame" default="false"/>
+
+    <xacro:arg name="external_urdf_loc" default=''/>
+
+    <xacro:arg name="device_type"                   default="simulation"/>
+
+    <xacro:property name="device_type"              value="$(arg device_type)"/>
+
+    <xacro:property name="urdf_loc" value="$(arg external_urdf_loc)"/>
+
+
+
+    <group name="sagittarius_arm">
+        <chain base_link="sgr532/base_link" tip_link="sgr532/link_grasping_frame"/>
+    </group>
+    <group name="sagittarius_gripper">
+        <link name="sgr532/link_gripper_left"/>
+        <link name="sgr532/link_gripper_right"/>
+        <joint name="joint_gripper_left"/>
+        <joint name="joint_gripper_right"/>
+    </group>
+
+    <group_state name="home" group="sagittarius_arm">
+        <joint name="joint1" value="0"/>
+        <joint name="joint2" value="0"/>
+        <joint name="joint3" value="0"/>
+        <joint name="joint4" value="0"/>
+        <joint name="joint5" value="0"/>
+        <joint name="joint6" value="0"/>
+    </group_state>
+    <group_state name="up" group="sagittarius_arm">
+        <joint name="joint1" value="0"/>
+        <joint name="joint2" value="0"/>
+        <joint name="joint3" value="1.5708"/>
+        <joint name="joint4" value="0"/>
+        <joint name="joint5" value="0"/>
+        <joint name="joint6" value="0"/>
+    </group_state>
+    <group_state name="sleep" group="sagittarius_arm">
+        <joint name="joint1" value="0"/>
+        <joint name="joint2" value="1.4"/>
+        <joint name="joint3" value="-1.47"/>
+        <joint name="joint4" value="0"/>
+        <joint name="joint5" value="-0.4851"/>
+        <joint name="joint6" value="0"/>
+    </group_state>
+    <group_state name="open" group="sagittarius_gripper">
+        <joint name="joint_gripper_left" value="0"/>
+        <joint name="joint_gripper_right" value="0"/>
+    </group_state>
+    <group_state name="close" group="sagittarius_gripper">
+        <joint name="joint_gripper_left" value="-0.028"/>
+        <joint name="joint_gripper_right" value="-0.028"/>
+    </group_state>
+    <group_state name="middle" group="sagittarius_gripper">
+        <joint name="joint_gripper_left" value="-0.014"/>
+        <joint name="joint_gripper_right" value="-0.014"/>
+    </group_state>
+
+    <end_effector name="gripper_end" parent_link="sgr532/link_grasping_frame" group="sagittarius_gripper"/>
+    <disable_collisions link1="sgr532/base_link" link2="sgr532/link1" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/base_link" link2="sgr532/link2" reason="Never"/>
+    <disable_collisions link1="sgr532/base_link" link2="sgr532/link3" reason="Never"/>
+    <disable_collisions link1="sgr532/link1" link2="sgr532/link2" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/link1" link2="sgr532/link3" reason="Never"/>
+    <disable_collisions link1="sgr532/link2" link2="sgr532/link3" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/link3" link2="sgr532/link4" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/link3" link2="sgr532/link5" reason="Never"/>
+    <disable_collisions link1="sgr532/link3" link2="sgr532/link6" reason="Never"/>
+    <disable_collisions link1="sgr532/link3" link2="sgr532/link_gripper_left" reason="Never"/>
+    <disable_collisions link1="sgr532/link3" link2="sgr532/link_gripper_right" reason="Never"/>
+    <disable_collisions link1="sgr532/link4" link2="sgr532/link5" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/link4" link2="sgr532/link6" reason="Never"/>
+    <disable_collisions link1="sgr532/link4" link2="sgr532/link_gripper_left" reason="Never"/>
+    <disable_collisions link1="sgr532/link4" link2="sgr532/link_gripper_right" reason="Never"/>
+    <disable_collisions link1="sgr532/link5" link2="sgr532/link6" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/link5" link2="sgr532/link_gripper_left" reason="Never"/>
+    <disable_collisions link1="sgr532/link5" link2="sgr532/link_gripper_right" reason="Never"/>
+    <disable_collisions link1="sgr532/link6" link2="sgr532/link_gripper_left" reason="Adjacent"/>
+    <disable_collisions link1="sgr532/link6" link2="sgr532/link_gripper_right" reason="Adjacent"/>
+</robot>

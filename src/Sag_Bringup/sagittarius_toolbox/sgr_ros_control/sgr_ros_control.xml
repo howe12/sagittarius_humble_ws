@@ -1,0 +1,8 @@
+<library path="sgr_ros_control">
+  <class
+    name="sgr_ros_control/SgrHardwareInterface"
+    type="sgr_ros_control::SgrHardwareInterface"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>A ROS2 System Interface for sagittarius arm.</description>
+  </class>
+</library>

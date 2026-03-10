@@ -1,0 +1,12 @@
+camera_image_topic: /camera1/image_raw
+camera_info_topic: /camera1/camera_info
+
+charuco:
+  squares_x: 14
+  squares_y: 9
+  square_length: 0.018
+  marker_length: 0.013
+
+
+
+

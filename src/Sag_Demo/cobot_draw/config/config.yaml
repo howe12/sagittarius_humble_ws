@@ -1,0 +1,6 @@
+gcode_file: "five_pointed_star.nc"
+init_pose: [0.0, 0.3394238, -1.2566163, -0.032451, 0.91719371, 0.0]  
+pen_offset_up: 0.02  
+pen_offset_down: 0.02  
+x_offset: 0.0  
+y_offset: 0.0  

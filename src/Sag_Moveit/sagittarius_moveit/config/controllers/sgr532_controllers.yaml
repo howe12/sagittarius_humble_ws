@@ -1,0 +1,22 @@
+controller_names:
+  - /sgr532/arm_controller
+  - /sgr532/gripper_controller
+
+/sgr532/arm_controller:
+  action_ns: follow_joint_trajectory
+  type: FollowJointTrajectory
+  default: true
+  joints:
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
+
+/sgr532/gripper_controller:
+  action_ns: follow_joint_trajectory
+  type: FollowJointTrajectory
+  default: true
+  joints:
+    - joint_gripper_left

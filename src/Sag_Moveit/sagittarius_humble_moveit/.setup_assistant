@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: sagittarius_descriptions
+    relative_path: urdf/sgr532.urdf.xacro
+  srdf:
+    relative_path: config/sgr532.srdf
+  package_settings:
+    author_name: sagittarius_humble_moveit
+    author_email: howe702@outllok.com
+    generated_timestamp: 1742884215
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

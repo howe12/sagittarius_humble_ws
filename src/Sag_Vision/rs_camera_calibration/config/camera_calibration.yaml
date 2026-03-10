@@ -1,0 +1,12 @@
+camera_image_topic: /camera/camera/color/image_raw
+camera_info_topic: /camera/camera/color/camera_info
+
+charuco:
+  squares_x: 14
+  squares_y: 9
+  square_length: 0.02
+  marker_length: 0.015
+
+
+
+
