@@ -113,8 +113,7 @@ ls -la /dev/sagittarius*
 
 ## 联系支持
 
-- 技术支持: litian.zhuang@nxrobo.com
-- QQ群: 6646169, 8346256
+- 技术支持: howe12@126.com
 
 ---
 *更新于 2026-03-10*
