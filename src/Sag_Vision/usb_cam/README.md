@@ -1,189 +1,133 @@
-# usb_cam [![ROS 2 CI](https://github.com/ros-drivers/usb_cam/actions/workflows/build_test.yml/badge.svg)](https://github.com/ros-drivers/usb_cam/actions/workflows/build_test.yml)
+# usb_cam
 
-## A ROS 2 Driver for V4L USB Cameras
-This package is based off of V4L devices specifically instead of just UVC.
+USB 摄像头 ROS 2 驱动
 
-For ros1 documentation, see [the ROS wiki](http://ros.org/wiki/usb_cam).
+## 功能描述
 
-## Supported ROS 2 Distros and Platforms
+V4L (Video4Linux) USB 摄像头驱动，提供标准的 ROS 2 图像话题发布。
 
-All Officially supported Linux Distros and corresponding ROS 2 releases are supported. Please create an issue if you experience any problems on these platforms.
+主要功能：
+- 支持 V4L 兼容的 USB 摄像头
+- 发布标准 sensor_msgs/Image 话题
+- 支持多种视频格式 (MJPEG, YUYV, RGB24 等)
+- 相机内参管理
+- 视频参数可配置
 
-Windows: TBD/Untested/Unproven
-MacOS: TBD/Untested/Unproven
+## 依赖
 
-For either MacOS or Windows - if you would like to try and get it working please create an issue to document your effort. If it works we can add it to the instructions here!
+### 核心依赖
+- `rclcpp` - ROS 2 C++ 客户端
+- `rclcpp_components` - 组件系统
+- `sensor_msgs` - 传感器消息
+- `std_msgs` - 标准消息
+- `std_srvs` - 标准服务
+- `cv_bridge` - OpenCV 桥接
+- `image_transport` - 图像传输
+- `camera_info_manager` - 相机信息管理
+- `v4l-utils` - V4L 工具
 
-## Quickstart
+### 可选依赖
+- `ffmpeg` - MJPEG 到 RGB 转换
 
-Assuming you have a supported ROS 2 distro installed, run the following command to install the binary release:
+## 启动方式
 
-```shell
-sudo apt-get install ros-<ros2-distro>-usb-cam
-```
-
-As of today this package should be available for binary installation on all active ROS 2 distros.
-
-If for some reason you cannot install the binaries, follow the directions below to compile from source.
-
-## Building from Source
-
-Clone/Download the source code into your workspace:
-
-```shell
-cd /path/to/colcon_ws/src
-git clone https://github.com/ros-drivers/usb_cam.git
-```
-
-Or click on the green "Download zip" button on the repo's github webpage.
-
-Once downloaded and ensuring you have sourced your ROS 2 underlay, go ahead and install the dependencies:
-
-```shell
-cd /path/to/colcon_ws
-rosdep install --from-paths src --ignore-src -y
-```
-
-From there you should have all the necessary dependencies installed to compile the `usb_cam` package:
-
-```shell
-cd /path/to/colcon_ws
-colcon build
-source /path/to/colcon_ws/install/setup.bash
-```
-
-Be sure to source the newly built packages after a successful build.
-
-Once sourced, you should be able to run the package in one of three ways, shown in the next section.
-
-## Running
-
-The `usb_cam_node` can be ran with default settings, by setting specific parameters either via the command line or by loading in a parameters file.
-
-We provide a "default" params file in the `usb_cam/config/params.yaml` directory to get you started. Feel free to modify this file as you wish.
-
-Also provided is a launch file that should launch the `usb_cam_node_exe` executable along with an additional node that displays an image topic.
-
-The commands to run each of these different ways of starting the node are shown below:
-
-**NOTE: you only need to run ONE of the commands below to run the node**
-
-```shell
-# run the executable with default settings (without params file)
-ros2 run usb_cam usb_cam_node_exe
-
-# run the executable while passing in parameters via a yaml file
-ros2 run usb_cam usb_cam_node_exe --ros-args --params-file /path/to/colcon_ws/src/usb_cam/config/params.yaml
-
-# launch the usb_cam executable that loads parameters from the same `usb_cam/config/params.yaml` file as above
-# along with an additional image viewer node
+### 1. 启动默认配置
+```bash
 ros2 launch usb_cam camera.launch.py
 ```
-## Launching Multiple usb_cam's
 
-To launch multiple nodes at once, simply remap the namespace of each one:
-
-```shell
-ros2 run usb_cam usb_cam_node_exe --remap __ns:=/usb_cam_0 --params-file /path/to/usb_cam/config/params_0.yaml
-ros2 run usb_cam usb_cam_node_exe --remap __ns:=/usb_cam_1 --params-file /path/to/usb_cam/config/params_1.yaml
+### 2. 指定参数启动
+```bash
+ros2 launch usb_cam camera.launch.py device:=/dev/video0
 ```
 
-## Supported formats
-
-### Device supported formats
-
-To see a connected devices supported formats, run the `usb_cam_node` and observe the console output.
-
-An example output is:
-
-```log
-This devices supproted formats:
-       Motion-JPEG: 1280 x 720 (30 Hz)
-       Motion-JPEG: 960 x 540 (30 Hz)
-       Motion-JPEG: 848 x 480 (30 Hz)
-       Motion-JPEG: 640 x 480 (30 Hz)
-       Motion-JPEG: 640 x 360 (30 Hz)
-       YUYV 4:2:2: 640 x 480 (30 Hz)
-       YUYV 4:2:2: 1280 x 720 (10 Hz)
-       YUYV 4:2:2: 640 x 360 (30 Hz)
-       YUYV 4:2:2: 424 x 240 (30 Hz)
-       YUYV 4:2:2: 320 x 240 (30 Hz)
-       YUYV 4:2:2: 320 x 180 (30 Hz)
-       YUYV 4:2:2: 160 x 120 (30 Hz)
+### 3. 程序方式启动
+```bash
+ros2 run usb_cam usb_cam_node_exe
 ```
 
-### Driver supported formats
+## 关键文件
 
-The driver has its own supported formats. See [the source code](include/usb_cam/formats/)
-for details.
+### Launch 文件
+| 文件 | 说明 |
+|------|------|
+| `launch/camera.launch.py` | 相机启动配置 |
 
-After observing [the devices supported formats](#device-supported-formats), specify which
-format to use via [the parameters file](config/params.yaml) with the `pixel_format` parameter.
+### 配置目录
+| 文件 | 说明 |
+|------|------|
+| `config/` | 相机配置文件 |
 
-To see a list of all currently supported driver formats, run the following command:
+### 源码
+| 文件 | 说明 |
+|------|------|
+| `src/usb_cam.cpp` | 主节点实现 |
+| `src/usb_cam_node.cpp` | 节点入口 |
 
-```shell
-ros2 run usb_cam usb_cam_node_exe --ros-args -p pixel_format:="test"
+### 消息定义
+| 文件 | 说明 |
+|------|------|
+| `msg/ExclusionZoneItem.msg` | 排除区域消息 |
+| `msg/RegionOfInterestInt.msg` | ROI 消息 |
+
+### 服务
+| 文件 | 说明 |
+|------|------|
+| `srv/Start.srv` | 启动服务 |
+| `srv/Stop.srv` | 停止服务 |
+
+## 参数配置
+
+### 常用参数
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `device` | string | `/dev/video0` | 视频设备 |
+| `pixel_format` | string | `mjpeg` | 像素格式 |
+| `image_width` | int | 640 | 图像宽度 |
+| `image_height` | int | 480 | 图像高度 |
+| `framerate` | int | 30 | 帧率 |
+| `camera_name` | string | `usb_cam` | 相机名称 |
+| `camera_info_url` | string | `` | 相机参数 URL |
+
+### 像素格式
+- `mjpeg` - Motion JPEG
+- `yuyv` - YUV 4:2:2
+- `rgb24` - RGB 24-bit
+- `uyvy` - UYVY 格式
+
+## 话题与服务
+
+### 发布的话题
+| 话题 | 类型 | 说明 |
+|------|------|------|
+| `/usb_cam/image_raw` | sensor_msgs/Image | 原始图像 |
+| `/usb_cam/camera_info` | sensor_msgs/CameraInfo | 相机参数 |
+
+### 服务
+| 服务 | 类型 | 说明 |
+|------|------|------|
+| `/usb_cam/start` | usb_cam/Start | 启动采集 |
+| `/usb_cam/stop` | usb_cam/Stop | 停止采集 |
+
+## 使用示例
+
+### 配置示例 (YAML)
+```yaml
+usb_cam_node:
+  ros__parameters:
+    device: /dev/video0
+    pixel_format: mjpeg
+    image_width: 1280
+    image_height: 720
+    framerate: 30
+    camera_name: front_camera
 ```
 
-Note: "test" here could be replaced with any non-supported pixel format string. The driver
-will detect if the given pixel format is supported or not.
+### 配合 AprilTag 使用
+```bash
+# 启动 USB 相机
+ros2 launch usb_cam camera.launch.py
 
-More formats and conversions can be added, contributions welcome!
-
-### Supported IO methods
-
-This driver supports three different IO methods as of today:
-
-1. `read`: copies the video frame between user and kernal space
-1. `mmap`: memory mapped buffers allocated in kernel space
-1. `userptr`: memory buffers allocated in the user space
-
-To read more on the different methods, check out [this article that provides a good overview
-of each](https://lwn.net/Articles/240667/)
-
-## Compression
-
-Big thanks to [the `ros2_v4l2_camera` package](https://gitlab.com/boldhearts/ros2_v4l2_camera#usage-1) and their documentation on this topic.
-
-The `usb_cam` should support compression by default since it uses `image_transport` to publish its images as long as the `image_transport_plugins` package is installed on your system. With the plugins installed the `usb_cam` package should publish a `compressed` topic automatically.
-
-Unfortunately `rviz2` and `show_image.py` do not support visualizing the compressed images just yet so you will need to republish the compressed image downstream to uncompress it:
-
-```shell
-ros2 run image_transport republish compressed raw --ros-args --remap in/compressed:=image_raw/compressed --remap out:=image_raw/uncompressed
+# 启动 AprilTag 检测
+ros2 launch apriltag_ros tag_usbcam.launch.py
 ```
-
-## Address and leak sanitizing
-
-Incorporated into the `CMakelists.txt` file to assist with memory leak and address sanitizing
-is a flag to add these compile commands to the targets.
-
-To enable them, pass in the `SANITIZE=1` flag:
-
-```shell
-colcon build --packages-select usb_cam --cmake-args -DSANITIZE=1
-```
-
-Once built, run the nodes executable directly and pass any `ASAN_OPTIONS` that are needed:
-
-```shell
-ASAN_OPTIONS=new_delete_type_mismatch=0 ./install/usb_cam/lib/usb_cam/usb_cam_node_exe 
-```
-
-After shutting down the executable with `Ctrl+C`, the sanitizer will report any memory leaks.
-
-By default this is turned off since compiling with the sanatizer turned on causes bloat and slows
-down performance.
-
-## Documentation
-
-[Doxygen](http://docs.ros.org/indigo/api/usb_cam/html/) files can be found on the ROS wiki.
-
-### License
-
-usb_cam is released with a BSD license. For full terms and conditions, see the [LICENSE](LICENSE) file.
-
-### Authors
-
-See the [AUTHORS](AUTHORS.md) file for a full list of contributors.
