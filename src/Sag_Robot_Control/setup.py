@@ -9,6 +9,7 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/sagittarius_robot_control']),
         ('share/sagittarius_robot_control', ['package.xml']),
+        ('share/sagittarius_robot_control/launch', glob('launch/*.launch.py')),
     ],
     install_requires=['setuptools', 'pyyaml'],
     zip_safe=True,

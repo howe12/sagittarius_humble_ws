@@ -159,7 +159,7 @@ class GesturePlayer(Node):
         def loop_task():
             while self.is_playing and rclpy.ok():
                 self.play_sequence(gesture_name)
-                time.sleep(0.2)
+                time.sleep(1.0)  # 等待 1 秒，避免动作累加
                 
         thread = threading.Thread(target=loop_task, daemon=True)
         thread.start()

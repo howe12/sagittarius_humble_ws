@@ -26,20 +26,20 @@ poses:
     duration: 0.5
 
   nod_down:
-    joints: [0.0, -0.3, 0.4, 0.0, 0.0, 0.0]
+    joints: [0.0, 0.0, -0.8, 0.0, 0.0, 0.0]
     duration: 0.3
 
   nod_up:
-    joints: [0.0, 0.1, -0.2, 0.0, 0.0, 0.0]
+    joints: [0.0, 0.0, 0.4, 0.0, 0.0, 0.0]
     duration: 0.3
 
   thinking_1:
-    joints: [0.0, 0.1, 0.1, 0.0, 0.1, 0.0]
-    duration: 0.5
+    joints: [0.3, 0.3, 0.4, 0.0, -0.5, 0.0]
+    duration: 1.0
 
   thinking_2:
-    joints: [0.0, 0.15, 0.15, 0.0, 0.15, 0.0]
-    duration: 0.5
+    joints: [-0.3, 0.4, 0.5, 0.0, -0.3, 0.0]
+    duration: 1.0
 
 # =======================
 # 复合动作 (Gestures)
@@ -69,13 +69,13 @@ gestures:
       - pose: home
         duration: 0.5
       - pose: nod_down
-        duration: 0.3
+        duration: 0.5
       - pose: nod_up
-        duration: 0.3
+        duration: 0.5
       - pose: nod_down
-        duration: 0.3
+        duration: 0.5
       - pose: nod_up
-        duration: 0.3
+        duration: 0.5
       - pose: home
         duration: 0.5
 
@@ -83,16 +83,20 @@ gestures:
     description: "思考中"
     loop: true
     sequence:
+      - pose: home
+        duration: 0.5
       - pose: thinking_1
-        duration: 0.5
+        duration: 1.0
       - pose: thinking_2
-        duration: 0.5
+        duration: 1.0
 
   breathing:
     description: "呼吸感"
     loop: true
     sequence:
-      - joints: [0.0, 0.05, 0.0, 0.0, 0.0, 0.0]
+      - pose: home
+        duration: 0.5
+      - joints: [0.0, 0.2, 0.3, 0.0, 0.1, 0.0]
         duration: 1.0
       - joints: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         duration: 1.0
